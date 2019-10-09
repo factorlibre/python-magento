@@ -36,6 +36,7 @@ class Client(object):
             kwargs['params'] = arguments
         elif arguments is not None:
             kwargs['json'] = arguments
+        kwargs['verify'] = False
         res = function(url, **kwargs)
         if (res.status_code == 400 and res._content):
             raise HTTPError(
