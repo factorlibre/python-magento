@@ -27,6 +27,7 @@ class Client(object):
         base_headers = {
             'Authorization': 'Bearer %s' % self._token,
             'User-Agent': self.useragent,
+            'Cookie': 'country=set',
         }
         if headers:
             base_headers.update(headers)
