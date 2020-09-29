@@ -66,7 +66,7 @@ class API(object):
     def __init__(self, url, username, password,
                  version='1.3.2.4', full_url=False,
                  protocol='xmlrpc', transport=None,
-                 verify_ssl=True):
+                 verify_ssl=True, useragent='python-magento'):
         """
         This is the Base API class which other APIs have to subclass. By
         default the inherited classes also get the properties of this
@@ -132,6 +132,7 @@ class API(object):
         :param transport: optional xmlrpclib.Transport subclass for
                     use in xmlrpc requests
         :param verify_ssl: for REST API, skip SSL validation if False
+        :param useragent: HTTP header to identify the application that makes calls to Magento.
         """
         assert protocol \
             in PROTOCOLS, "protocol must be %s" % ' OR '.join(PROTOCOLS)
@@ -145,6 +146,7 @@ class API(object):
         self.client = None
         self.verify_ssl = verify_ssl
         self.lock = RLock()
+        self.useragent = useragent
 
     def connect(self):
         """
@@ -160,7 +162,8 @@ class API(object):
         elif self.protocol == 'rest':
             # Use an authentication token as the password
             self.client = rest.Client(self.url, self.password,
-                                      verify_ssl=self.verify_ssl)
+                                      verify_ssl=self.verify_ssl,
+                                      useragent=self.useragent)
         else:
             self.client = Client(self.url)
 
